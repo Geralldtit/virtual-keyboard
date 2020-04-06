@@ -2,7 +2,8 @@ const keyboard = {
   elements: {
     main: null,
     keysWrapper: null,
-    keys: []
+    keys: [],
+    textArea: null
   },
 
   eventHandlers: {
@@ -18,14 +19,29 @@ const keyboard = {
 
   init() {
     this.elements.main = document.createElement('div');
-    this.elements.keysWrapper = document.createElement('div');
-
     this.elements.main.classList.add('keyboard');
+    this.elements.keysWrapper = document.createElement('div');
     this.elements.keysWrapper.classList.add('keys');
+    this.elements.textArea = document.createElement('textarea');
+    this.elements.textArea.classList.add("input-area");
+
+    this.elements.keysWrapper.appendChild(this.elements.textArea);
+    this.elements.keysWrapper.appendChild(document.createElement('br'));
     this.elements.keysWrapper.appendChild(this._createKeys());
 
+    this.elements.keys = this.elements.keysWrapper.querySelectorAll(".key");
+
     this.elements.main.appendChild(this.elements.keysWrapper);
+
     document.body.appendChild(this.elements.main);
+
+    document.querySelectorAll('input-area').forEach(element => {
+      element.addEventListener('focus', () => {
+        this.open(element.value, currentValue => {
+          element.value = currentValue;
+        });
+      });
+    });
 
   },
 
@@ -42,8 +58,9 @@ const keyboard = {
     keyLayout.forEach(key => {
       const keyElement = document.createElement('button');
       const insertLineBreak = ["backspace", "del", "enter", "rshift"].indexOf(key) !== -1;
+
       keyElement.setAttribute("type", "button");
-      keyElement.classList.add("key");
+      keyElement.classList.add(key.length > 1 ? "special-key" : "key");
 
       switch(key) {
         case "backspace":
@@ -88,8 +105,8 @@ const keyboard = {
           keyElement.textContent = key.toLowerCase();
           keyElement.addEventListener('click', () => {
             this.properties.value += this.properties.capsLock || this.properties.shift
-                                      ? this.properties.value.toUpperCase()
-                                      : this.properties.value.toLowerCase();
+                                      ? key.toUpperCase()
+                                      : key.toLowerCase();
           this._triggerEvent("oninput");
           });
           break;
@@ -105,15 +122,36 @@ const keyboard = {
   },
 
   _triggerEvent(handlerName) {
-    console.log('Event triggered! Event name: ' + handlerName);
+    if(typeof this.eventHandlers[handlerName] == "function"){
+      this.eventHandlers[handlerName](this.properties.value);
+    }
   },
 
   _toggleCapsLock() {
-    console.log('Toggle CapsLock toggled');
+    this.properties.capsLock = !this.properties.capsLock;
+    for(const key of this.elements.keys){
+      if(key.childElementCount === 0){
+        key.textContent = this.properties.capsLock
+                          ? key.textContent.toUpperCase()
+                          : key.textContent.toLowerCase();
+      }
+    }
+  },
+
+  open(initialValue, oninput, onclose){
+    this.properties.value = initialValue || "";
+    this.eventHandlers.oninput = oninput;
+    this.eventHandlers.onclose = onclose;
   }
 
 }
 
 window.addEventListener('DOMContentLoaded', function(){
   keyboard.init();
+  // keyboard.open("", function(currentValue){
+  //   console.log('current value: ' + currentValue);
+
+  // }, function(currentValue) {
+
+  // });
 });

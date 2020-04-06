@@ -1,3 +1,9 @@
+.input-area {
+  height: 35vh;
+  width: 65%;
+  outline: none;
+}
+
 .keyboard {
   position: fixed;
   left: 0;
@@ -14,10 +20,7 @@
   text-align: center;
 }
 
-/* .keyboard--hidden {
-  bottom: -100%;
-} */
-
+.special-key,
 .key {
   position: relative;
   height: 50px;
