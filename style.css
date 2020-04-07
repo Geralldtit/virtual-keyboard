@@ -53,12 +53,12 @@
 
 .double-wide {
   width: 10%;
-  max-width: 300px;
+  max-width: 100px;
 }
 
 .mega-wide {
-  width: 20%;
-  max-width: 700px;
+  width: 15%;
+  max-width: 300px;
 }
 
 .switched-mode::after {
