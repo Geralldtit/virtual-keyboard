@@ -20,18 +20,18 @@
   text-align: center;
 }
 
-.special-key,
+.double-key,
 .key {
   position: relative;
   height: 50px;
-  width: 6%;
+  width: 5%;
   max-width: 70px;
   margin: 4px;
   border-radius: 5px;
   border: none;
   background: rgba(255, 255, 255, 0.7);
   color: #CEB5A7;
-  font-size: 1.8rem;
+  font-size: 1.0rem;
   outline: none;
   cursor: pointer;
   display: inline-flex;
@@ -51,12 +51,12 @@
 }
 
 .double-wide {
-  width: 12%;
+  width: 10%;
   max-width: 300px;
 }
 
 .mega-wide {
-  width: 35%;
+  width: 20%;
   max-width: 700px;
 }
 
