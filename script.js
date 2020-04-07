@@ -470,7 +470,8 @@ const keyboard = {
     this.elements.keysWrapper = document.createElement('div');
     this.elements.keysWrapper.classList.add('keys');
     this.elements.textArea = document.createElement('textarea');
-    this.elements.textArea.classList.add("input-area");
+    this.elements.textArea.setAttribute('placeholder', ' Use Ctrl + Alt for change language...');
+    this.elements.textArea.classList.add('input-area');
 
     this.elements.keysWrapper.appendChild(this.elements.textArea);
     this.elements.keysWrapper.appendChild(document.createElement('br'));
