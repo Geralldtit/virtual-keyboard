@@ -35,7 +35,7 @@ const keyboard = {
 
     document.body.appendChild(this.elements.main);
 
-    document.querySelectorAll('input-area').forEach(element => {
+    document.querySelectorAll('.input-area').forEach(element => {
       element.addEventListener('focus', () => {
         this.open(element.value, currentValue => {
           element.value = currentValue;
