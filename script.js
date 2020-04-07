@@ -251,12 +251,12 @@ const keyboard = {
         ru: "\\",
         ruShift: "//"
       },
-      Delete : {
-        en: "Del",
-        enShift: "Del",
-        ru: "Del",
-        ruShift: "Del"
-      },
+      // Delete : {
+      //   en: "Del",
+      //   enShift: "Del",
+      //   ru: "Del",
+      //   ruShift: "Del"
+      // },
       CapsLock : {
         en: "CapsLock",
         enShift: "CapsLock",
@@ -475,7 +475,7 @@ const keyboard = {
     //keyLayout.forEach(key => {
     for(let key in keyLayout) {
       const keyElement = document.createElement('button');
-      const insertLineBreak = ["Backspace", "Delete", "Enter", "ShiftRight"].indexOf(key) !== -1;
+      const insertLineBreak = ["Backspace", "Backslash" /*"Delete"*/, "Enter", "ShiftRight"].indexOf(key) !== -1;
 
       keyElement.setAttribute("type", "button");
       keyElement.classList.add("key");
@@ -483,8 +483,8 @@ const keyboard = {
 
       switch(key) {
         case "Backspace":
-          keyElement.classList.add("double-wide");
-          keyElement.textContent = key.toLowerCase();
+          keyElement.classList.add("double-wide", "special-key");
+          keyElement.textContent =  keyLayout[key].en;
 
           keyElement.addEventListener('click', () => {
             this.properties.value =
@@ -493,35 +493,71 @@ const keyboard = {
           });
           break;
 
+        case "Tab":
+          keyElement.classList.add("double-wide", "special-key");
+          keyElement.textContent = keyLayout[key].en;
+          break;
+
+        //TODO: implement after basic functional
+
+        // case "Delete":
+        //   keyElement.textContent = key.en;
+
+        //   keyElement.addEventListener('click', () => {
+        //     this.properties.value =
+        //       this.properties.value.substring(0, this.properties.value.length - 1);
+        //       this._triggerEvent("oninput");
+        //   });
+        //   break;
+
         case "CapsLock":
-          keyElement.classList.add("double-wide", "switched-mode");
-          keyElement.textContent = key.toLowerCase();
+          keyElement.classList.add("double-wide", "switched-mode", "special-key");
+          keyElement.textContent = keyLayout[key].en;
 
           keyElement.addEventListener('click', () => {
             this._toggleCapsLock();
-            keyElement.classList.toggle('active', this.properties.capsLock);
+            keyElement.classList.toggle('switch-on', this.properties.capsLock);
           });
           break;
 
         case "Enter":
-          keyElement.classList.add("double-wide");
-          keyElement.textContent = key.toLowerCase();
+          keyElement.classList.add("double-wide", "special-key");
+          keyElement.textContent = keyLayout[key].en;
           keyElement.addEventListener('click', () => {
             this.properties.value += "\n";
             this._triggerEvent("oninput");
           });
           break;
 
-        case "Space":
-          keyElement.classList.add("mega-wide");
+          case "Enter":
+            keyElement.classList.add("double-wide", "special-key");
+            keyElement.textContent = keyLayout[key].en;
+            keyElement.addEventListener('click', () => {
+              this.properties.value += "\n";
+              this._triggerEvent("oninput");
+            });
+            break;
+
+        case "ShiftLeft":
+        case "ShiftRight":
+          keyElement.classList.add("double-wide", "special-key");
+          keyElement.textContent = keyLayout[key].en;
           keyElement.addEventListener('click', () => {
-            this.properties.value += " ";
-            this._triggerEvent("oninput");
           });
           break;
 
+          case "ControlLeft":
+          case "ControlRight":
+            keyElement.classList.add("double-wide", "special-key");
+            keyElement.textContent = keyLayout[key].en;
+            keyElement.addEventListener('click', () => {
+            });
+            break;
+
         default:
-          keyElement.textContent = keyLayout[key].ru;// .toLowerCase();
+          keyElement.textContent = this.properties.shift
+            ? keyLayout[key].ru.toUpperCase()
+            :keyLayout[key].ru.toLowerCase();
           keyElement.addEventListener('click', () => {
             this.properties.value += this.properties.capsLock || this.properties.shift
                                       ? keyLayout[key].ru.toUpperCase()
@@ -551,7 +587,7 @@ const keyboard = {
   _toggleCapsLock() {
     this.properties.capsLock = !this.properties.capsLock;
     for(const key of this.elements.keys){
-      if(key.childElementCount === 0){
+      if(!key.classList.contains('special-key')){
         key.textContent = this.properties.capsLock
                           ? key.textContent.toUpperCase()
                           : key.textContent.toLowerCase();

@@ -46,6 +46,7 @@
   color: #E8F1F2;
 }
 
+.special-key,
 .dark {
   background: rgba(0,0,0,0.4);
 }
@@ -71,11 +72,11 @@
   border-radius: 50%;
 }
 
-.active {
+.switch-on {
   background: #CEB5A7;
   color: #F9FAEC;
 }
 
-.active::after {
+.switch-on::after {
   background: #f57d2d;
 }
