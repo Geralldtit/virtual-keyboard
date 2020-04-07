@@ -71,13 +71,13 @@ const keyboard = {
       en: "-",
       enShift: ")",
       ru: "-",
-      ruShift: ")"
+      ruShift: "_"
     },
     Equal : {
       en: "=",
       enShift: ")",
       ru: "=",
-      ruShift: ")"
+      ruShift: "+"
     },
     Backspace : {
       en: "BackSpace",
@@ -434,6 +434,10 @@ const keyboard = {
         if (event.code == 'AltLeft' && event.ctrlKey ) {
           keyboard._changeLanguage();
         }
+        if(event.shiftKey){
+          keyboard.properties.shift = true;
+          keyboard._refreshButtonsText();
+        }
       }
     };
 
@@ -442,6 +446,13 @@ const keyboard = {
       if(keyPressed) {
         document.querySelectorAll('.key').forEach(x => x.classList.remove('active'));
       }
+
+      if(!event.shiftKey && keyboard.properties.shift){
+        keyboard.properties.shift = false;
+        keyboard._refreshButtonsText();
+      }
+
+      if(keyboard.properties.shift) console.log('shift!');
 
     };
 
@@ -570,6 +581,13 @@ const keyboard = {
           });
           break;
 
+          case "MetaLeft":
+            keyElement.classList.add("double-wide", "special-key");
+            keyElement.textContent = this.keyLayout[key].en;
+            keyElement.addEventListener('click', () => {
+            });
+            break;
+
         case "Space":
           keyElement.classList.add("mega-wide");
           keyElement.addEventListener('click', () => {
@@ -583,9 +601,18 @@ const keyboard = {
             ? this.keyLayout[key][this.properties.lang].toUpperCase()
             :this.keyLayout[key][this.properties.lang].toLowerCase();
           keyElement.addEventListener('click', () => {
-            this.properties.value += this.properties.capsLock || this.properties.shift
-                                      ? this.keyLayout[key][this.properties.lang].toUpperCase()
-                                      : this.keyLayout[key][this.properties.lang].toLowerCase();
+            let newText = "";
+            if(this.properties.shift){
+              newText = this.properties.capsLock
+                        ? this.keyLayout[key][this.properties.lang + 'Shift'].toLowerCase()
+                        : this.keyLayout[key][this.properties.lang + 'Shift'].toUpperCase();
+
+            }else {
+              newText = this.properties.capsLock
+                        ? this.keyLayout[key][this.properties.lang].toUpperCase()
+                        : this.keyLayout[key][this.properties.lang].toLowerCase();
+            };
+            this.properties.value += newText;
             this._triggerEvent("oninput");
           });
           break;
@@ -630,11 +657,17 @@ const keyboard = {
       if(!element.classList.contains('special-key') &&
           !element.classList.contains('mega-wide')){
             let data = element.getAttribute('data');
-            let newText = this.properties.capsLock
-                          ? this.keyLayout[data][this.properties.lang].toUpperCase()
-                          : this.keyLayout[data][this.properties.lang].toLowerCase();
+            let newText = "";
+            if(this.properties.shift){
+              newText = this.properties.capsLock
+                        ? this.keyLayout[data][this.properties.lang + 'Shift'].toLowerCase()
+                        : this.keyLayout[data][this.properties.lang + 'Shift'].toUpperCase();
 
-
+            }else {
+              newText = this.properties.capsLock
+                        ? this.keyLayout[data][this.properties.lang].toUpperCase()
+                        : this.keyLayout[data][this.properties.lang].toLowerCase();
+            }
             element.textContent = newText;
           }
     });
