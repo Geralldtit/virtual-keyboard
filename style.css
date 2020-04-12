@@ -46,18 +46,19 @@
   color: #E8F1F2;
 }
 
+.special-key,
 .dark {
   background: rgba(0,0,0,0.4);
 }
 
 .double-wide {
   width: 10%;
-  max-width: 300px;
+  max-width: 100px;
 }
 
 .mega-wide {
-  width: 20%;
-  max-width: 700px;
+  width: 15%;
+  max-width: 300px;
 }
 
 .switched-mode::after {
@@ -76,6 +77,6 @@
   color: #F9FAEC;
 }
 
-.active::after {
+.switch-on::after {
   background: #f57d2d;
 }
